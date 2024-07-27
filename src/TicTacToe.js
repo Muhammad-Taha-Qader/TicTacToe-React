@@ -1,35 +1,40 @@
-// import React from 'react';
-// import { useState } from 'react';
-// import ReactDOM from 'react-dom';
-
-// export function stopWatch(){
-//     const [time,setTime]=useState(0);
-//      setInterval(setTime(++time),1000);
-//     return (
-//         <p>00:00:{time}</p>
-//     );
-// }
-
 import React, { useState, useEffect } from 'react';
 
-export function TicTacToe() {
+function BoardBox({val}){ //When you want to use a JavaScript expression or a variable inside JSX, you need to wrap it in curly braces.
+    //Destructuring Props:In the BoardBox function component, the props are being destructured. val is extracted from the props object. This is similar to how you might destructure an object in JavaScript.
+    const[boxVal, SetBoxVal]= useState(' ');
+    console.log('In Box fun: '+val);
+    function ExecuteTurn(){
+        if(val){
+            SetBoxVal('X');
+            val= (!val);
+        }else{
+            SetBoxVal('O');
+            val= (!val);
+        }
+    }
 
+    return <button type='button' onClick={ExecuteTurn} style={{height:17+'px', width:20+'px'}}>{boxVal}</button>
+}
+export function TicTacToe() {
+    let turn=false;
     return (
         <div>
             <div>
-                <div><button type='button'>X</button></div>
-                <div><button type='button'>X</button></div>
-                <div><button type='button'>X</button></div>
+                <BoardBox val={turn} />
+                {console.log('In main fun: '+turn)}
+                <BoardBox/>
+                <BoardBox/>
             </div>
             <div>
-                <div><button type='button'>X</button></div>
-                <div><button type='button'>X</button></div>
-                <div><button type='button'>X</button></div>
+                <BoardBox/>
+                <BoardBox/>
+                <BoardBox/>
             </div>
             <div>
-                <div><button type='button'>X</button></div>
-                <div><button type='button'>X</button></div>
-                <div><button type='button'>X</button></div>
+                <BoardBox/>
+                <BoardBox/>
+                <BoardBox/>
             </div>
         </div>
     );
