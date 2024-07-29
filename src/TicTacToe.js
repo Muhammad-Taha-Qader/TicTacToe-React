@@ -1,47 +1,6 @@
 import React, { useState, useEffect } from 'react';
 let turn=false;
 
-// function BoardBox({val}){ //When you want to use a JavaScript expression or a variable inside JSX, you need to wrap it in curly braces.
-//     //Destructuring Props:In the BoardBox function component, the props are being destructured. val is extracted from the props object. This is similar to how you might destructure an object in JavaScript.
-//     const[boxVal, SetBoxVal]= useState(' ');
-//     function ExecuteTurn(){
-//         if(turn && boxVal==' '){
-//             SetBoxVal('X');
-//             turn= (!turn);
-//         }else if(!turn && boxVal==' '){
-//             SetBoxVal('O');
-//             turn= (!turn);
-//         }
-//     }
-
-//     return <button type='button' onClick={ExecuteTurn} style={{height:17+'px', width:20+'px'}}>{boxVal}</button>
-// }
-// export function TicTacToe() {
-//     return (
-//         <div>
-//             <div>
-//                 <BoardBox />
-//                 <BoardBox/>
-//                 <BoardBox/>
-//             </div>
-//             <div>
-//                 <BoardBox/>
-//                 <BoardBox/>
-//                 <BoardBox/>
-//             </div>
-//             <div>
-//                 <BoardBox/>
-//                 <BoardBox/>
-//                 <BoardBox/>
-//             </div>
-//         </div>
-//     );
-// }
-
-
-
-
-
 function BoardBox({ val, onBoxClick }) {
   return (
     <button className="box" onClick={onBoxClick}> {val}</button>
@@ -50,6 +9,8 @@ function BoardBox({ val, onBoxClick }) {
 
 function checkWinner(boxes){
     console.log('player cam in check is: '+turn)
+    console.log('Boxes in check:')
+    console.log(boxes)
     let player = (!turn)? 'X':'O'; //has to check for previous turn cz turn change instatly right after player playes his turn and after that check is being called outside hadleClick
     let count=0;
     //horizontal check
@@ -81,16 +42,16 @@ function checkWinner(boxes){
     return null;
 }
 
-export function TicTacToe() {
-    console.log('Turns val after rerentder:'+turn )
-//   const [boxes, setBoxes] = useState(Array(9).fill(null));
-  const [boxes, setBoxes] = useState([
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ]);
-  let playersStatus;
 
+
+function GameBoard({boxes, onPlay}) {
+//   const [boxes, setBoxes] = useState(Array(9).fill(null));
+  // const [boxes, setBoxes] = useState([
+  //   [null, null, null],
+  //   [null, null, null],
+  //   [null, null, null],
+  // ]);
+  let playersStatus;
 
   function handleClick(i,j) {
     const mutableBoxes = boxes.slice();
@@ -105,21 +66,20 @@ export function TicTacToe() {
     //$$If i update playersStatus value in here it will got reset to undefine when this componet reloads
     //but we don't want that, So either we have to use useState() or we have to move this code out 
     //direct in TicTacTok fun so that it always get re updated when re render happens
-    turn= (!turn);
-    setBoxes(mutableBoxes);
+   
+    // turn= (!turn);
+    // setBoxes(mutableBoxes);
+    onPlay(mutableBoxes);
   }
-  console.log(boxes)
-  console.log("check returns: "+checkWinner(boxes))
+
   if(checkWinner(boxes))
     playersStatus=`Player ${checkWinner(boxes)} WINS!`;
   else
     playersStatus=`Next turn is of player: ${(turn)? 'X':'O'}`;
-  console.log('Player staus is:' +playersStatus);
   
   return (
     <>
       <p>{playersStatus}</p>
-    {console.log('Player staus in main: ' +playersStatus)}
 
       <div className="board-row">
         <BoardBox val={boxes[0][0]} onBoxClick={() => handleClick(0,0)} />
@@ -139,3 +99,91 @@ export function TicTacToe() {
     </>
   );
 }
+
+// function CreateMoveButtons(trace){
+//   console('In creat list');
+//   console.log(trace);
+//   function jumpTo(){
+
+//   }
+//     const moves = trace.map((boxes, i)=>{
+//       let description;
+//       if (i > 0) {
+//         description = 'Go to move #' + i;
+//       } else {
+//         description = 'Go to game start';
+//       }
+//       return (<li>
+//         <button onClick={()=> jumpTo(i)}>{description}</button> 
+//         </li>);
+//     }
+//   );
+//   return moves;
+// }
+
+// function CreateMoveButtons(traceLength){
+//   console('In creat list');
+//   console.log(traceLength);
+//   function jumpTo(){
+
+//   }
+//     let moves=[];
+//      for(let i=0;i<traceLength;i++){
+//       let description;
+//       if (i > 0) {
+//         description = 'Go to move #' + i;
+//       } else {
+//         description = 'Go to game start';
+//       }
+//       moves.push(<li>
+//         <button onClick={()=> jumpTo(i)}>{description}</button> 
+//         </li>);
+//     }
+//   return moves;
+// }
+
+export function TicTacToe() {
+    const [trace, setTrace] = useState([
+      [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ]
+    ]);
+    // const [trace, setTrace] = useState([Array(9).fill(null)]);
+    const currentBoxes = trace[trace.length - 1];
+
+    function handlePlay(futureBoxes){
+      setTrace([...trace, futureBoxes]);
+      turn= (!turn);
+    }
+
+    function jumpTo(){
+
+    }
+    const moves = trace.map((boxes, i)=>{
+        let description;
+        if (i > 0) {
+          description = 'Go to move #' + i;
+        } else {
+          description = 'Go to game start';
+        }
+        return (<li key={i}>
+          <button onClick={()=> jumpTo(i)}>{description}</button> 
+          </li>);
+      }
+    );
+
+    console.log("Cur is: ")
+    console.log(currentBoxes)
+    return(
+      <div>
+        <GameBoard onPlay={handlePlay} boxes={currentBoxes}/>
+        <ol>
+          {/* <CreateMoveButtons trace={trace} /> */}
+          {/* <CreateMoveButtons traceLength={trace.length} /> */}
+          {moves}
+        </ol>
+      </div>
+    );
+  }
