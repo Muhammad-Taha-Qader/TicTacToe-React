@@ -15,7 +15,7 @@ import { TicTacToe } from './TicTacToe';
 
 const App = () => (
   <div>
-    <h1>Hello, it's TicTacToe!</h1>
+    <h1>TicTacToe!</h1>
     <TicTacToe />
   </div>
 );

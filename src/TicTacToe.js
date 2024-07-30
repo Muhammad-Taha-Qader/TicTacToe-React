@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 let turn=false;
 
 function BoardBox({ val, onBoxClick }) {
@@ -79,21 +79,22 @@ function GameBoard({boxes, onPlay}) {
   return (
     <>
       <p>{playersStatus}</p>
-
-      <div className="board-row">
-        <BoardBox val={boxes[0][0]} onBoxClick={() => handleClick(0,0)} />
-        <BoardBox val={boxes[0][1]} onBoxClick={() => handleClick(0,1)} />
-        <BoardBox val={boxes[0][2]} onBoxClick={() => handleClick(0,2)} />
-      </div>
-      <div className="board-row">
-        <BoardBox val={boxes[1][0]} onBoxClick={() => handleClick(1,0)} />
-        <BoardBox val={boxes[1][1]} onBoxClick={() => handleClick(1,1)} />
-        <BoardBox val={boxes[1][2]} onBoxClick={() => handleClick(1,2)} />
-      </div>
-      <div className="board-row">
-        <BoardBox val={boxes[2][0]} onBoxClick={() => handleClick(2,0)} />
-        <BoardBox val={boxes[2][1]} onBoxClick={() => handleClick(2,1)} />
-        <BoardBox val={boxes[2][2]} onBoxClick={() => handleClick(2,2)} />
+      <div>
+        <div className="board-row">
+          <BoardBox val={boxes[0][0]} onBoxClick={() => handleClick(0,0)} />
+          <BoardBox val={boxes[0][1]} onBoxClick={() => handleClick(0,1)} />
+          <BoardBox val={boxes[0][2]} onBoxClick={() => handleClick(0,2)} />
+        </div>
+        <div className="board-row">
+          <BoardBox val={boxes[1][0]} onBoxClick={() => handleClick(1,0)} />
+          <BoardBox val={boxes[1][1]} onBoxClick={() => handleClick(1,1)} />
+          <BoardBox val={boxes[1][2]} onBoxClick={() => handleClick(1,2)} />
+        </div>
+        <div className="board-row">
+          <BoardBox val={boxes[2][0]} onBoxClick={() => handleClick(2,0)} />
+          <BoardBox val={boxes[2][1]} onBoxClick={() => handleClick(2,1)} />
+          <BoardBox val={boxes[2][2]} onBoxClick={() => handleClick(2,2)} />
+        </div>
       </div>
     </>
   );
@@ -150,9 +151,6 @@ export function TicTacToe() {
       ]
     ]);
     // const [trace, setTrace] = useState([Array(9).fill(null)]);
-    console.log("PRINTING TRACE FROM Tic:");
-    console.log(trace);
-    console.log("Current Trace MOVES: "+ currentTraceMove);
     const [currentTraceMove, setCurrentTraceMove] = useState(0);
 
     // const currentBoxes = trace[trace.length - 1];
@@ -171,9 +169,6 @@ export function TicTacToe() {
           )
         );
       };
-      console.log("PRINTING TRACE FROM HANDLE PLAY---:");
-      console.log(trace);
-      console.log(futureBoxes);
       const updatedTrace = [...deepCopy(trace.slice(0, currentTraceMove + 1)), futureBoxes];
       setTrace(updatedTrace);
       setCurrentTraceMove(updatedTrace.length-1);
@@ -182,13 +177,10 @@ export function TicTacToe() {
 
     function jumpTo(nextMove){
       setCurrentTraceMove(nextMove);
-      console.log("Current Trace NEXT MOVES: "+ nextMove);
-      turn= (nextMove % 2 === 0)? (false): (true);// true -> x,  flase-> O
-      console.log("Curent TRACK:")
-      console.log(trace)
-      console.log(nextMove)
+      turn= (nextMove % 2 === 0)? (false): (true  );// true -> x,  flase-> O
     }
-    const moves = trace.map((boxes, i)=>{
+    
+    const moves = trace.map(( _ , i)=>{
         let description;
         if (i > 0) {
           description = 'Go to move #' + i;
